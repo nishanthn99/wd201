@@ -49,7 +49,7 @@ const todoList = () => {
 
       // Format the date as YYYY-MM-DD
       const formattedDate = `${year}-${month}-${day}`;
-      const status = item.completed ? '[X]' : '[ ]'
+      const status = item.completed ? '[x]' : '[ ]'
       const todaydate = new Date().getDate()
       const duedated = dueDate.getDate()
       if (todaydate === duedated) {
