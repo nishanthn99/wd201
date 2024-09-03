@@ -5,7 +5,11 @@ const { all, markAsComplete, add } = todoList();
 
 describe("Test for Todos", () => {
   beforeEach(() => {
-    all.length = 0;
+    add({
+      title: "Test todo",
+      completed: false,
+      dueDate: new Date().toLocaleDateString("en-CA"),
+    });
   });
   test("should add new todo", () => {
     add({
@@ -17,27 +21,24 @@ describe("Test for Todos", () => {
   test("should mark todo as complete", () => {
     add({
       title: "Test todo",
-      completed: true,
+      completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
-    expect(all[0].completed).toBe(true);
+    expect(all[1].completed).toBe(false);
+    markAsComplete(1);
+    expect(all[1].completed).toBe(true);
   });
   test("should create a new todo", () => {
-    expect(all.length).toBe(0);
+    const TodolistCount = all.length;
     add({
       title: "First Test Todo",
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
-    expect(all.length).toBe(1);
+    expect(all.length).toBe(TodolistCount + 1);
   });
 
   test("should mark a todo as completed", () => {
-    add({
-      title: "Test todo",
-      completed: false,
-      dueDate: new Date().toLocaleDateString("en-CA"),
-    });
     expect(all[0].completed).toBe(false);
     markAsComplete(0);
     expect(all[0].completed).toBe(true);
