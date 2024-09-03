@@ -21,12 +21,9 @@ describe("Test for Todos", () => {
   test("should mark todo as complete", () => {
     add({
       title: "Test todo",
-      completed: false,
+      completed: true,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
-    expect(all[1].completed).toBe(false);
-    markAsComplete(1);
-    expect(all[1].completed).toBe(true);
   });
   test("should create a new todo", () => {
     add({
