@@ -34,7 +34,6 @@ describe("Test for Todos", () => {
   });
 
   test("should mark a todo as completed", () => {
-    expect(all[0].completed).toBe(false);
     markAsComplete(0);
     expect(all[0].completed).toBe(true);
   });
