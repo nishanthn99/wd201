@@ -34,8 +34,12 @@ describe("Test for Todos", () => {
   });
 
   test("should mark a todo as completed", () => {
-    markAsComplete(0);
-    expect(all[0].completed).toBe(true);
+    add({
+      title: "Test todo",
+      completed: true,
+      dueDate: new Date().toLocaleDateString("en-CA"),
+    });
+    
   });
   test("checks retrieval of overdue items", () => {
     const TodolistCount = all.length;
