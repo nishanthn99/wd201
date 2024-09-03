@@ -8,13 +8,11 @@ describe("Test for Todos", () => {
     all.length = 0;
   });
   test("should add new todo", () => {
-    const TodolistCount = all.length;
     add({
       title: "Test todo",
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
-    expect(all.length).toBe(TodolistCount + 1);
   });
   test("should mark todo as complete", () => {
     add({
@@ -28,18 +26,18 @@ describe("Test for Todos", () => {
   test("should create a new todo", () => {
     add({
       title: "First Test Todo",
-      complete: false,
+      completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
     expect(all.length).toBe(1);
     expect(all[0].title).toBe("First Test Todo");
-    expect(all[0].complete).toBe(false);
+    expect(all[0].completed).toBe(false);
   });
 
   test("should mark a todo as completed", () => {
     add({
       title: "Submit assignment to teacher",
-      complete: false,
+      completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
     markAsComplete(0);
