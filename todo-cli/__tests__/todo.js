@@ -23,21 +23,22 @@ describe("Test for Todos", () => {
     expect(all[0].completed).toBe(true);
   });
   test("should create a new todo", () => {
-    const TodolistCount = all.length;
+    expect(all.length).toBe(0);
     add({
       title: "First Test Todo",
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
-    expect(all.length).toBe(TodolistCount + 1);
+    expect(all.length).toBe(1);
   });
 
   test("should mark a todo as completed", () => {
     add({
-      title: "Submit assignment to teacher",
+      title: "Test todo",
       completed: false,
       dueDate: new Date().toLocaleDateString("en-CA"),
     });
+    expect(all[0].completed).toBe(false);
     markAsComplete(0);
     expect(all[0].completed).toBe(true);
   });
