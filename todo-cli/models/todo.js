@@ -96,6 +96,9 @@ module.exports = (sequelize, DataTypes) => {
 
     displayableString() {
       let checkbox = this.completed ? "[x]" : "[ ]";
+      if (this.dueDate === new Date().toLocaleDateString("en-CA")) {
+        return `${this.id}. ${checkbox} ${this.title}`;
+      }
       return `${this.id}. ${checkbox} ${this.title} ${this.dueDate}`;
     }
   }
