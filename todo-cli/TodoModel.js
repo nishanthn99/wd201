@@ -2,13 +2,13 @@ const { DataTypes, Model } = require("sequelize");
 const { sequelize } = require("./connectdb.js");
 
 class Todo extends Model {
-    static async createRec(params){
-        return await Todo.create(params);
-    }
+  static async createRec(params) {
+    return await Todo.create(params);
+  }
 
-    displayTodos(){
-        return `${this.id} ${this.title} ${this.completed}`;
-    }
+  displayTodos() {
+    return `${this.id} ${this.title} ${this.completed}`;
+  }
 }
 Todo.init(
   {
@@ -26,7 +26,7 @@ Todo.init(
   },
   {
     sequelize,
-  }
+  },
 );
 
 Todo.sync();
