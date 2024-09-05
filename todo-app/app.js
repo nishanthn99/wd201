@@ -9,6 +9,9 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.set("view engine", "ejs");
 
+Todo.createTodo({title:"first todo",dueDate:"2024-10-10"});
+Todo.createTodo({title:"sec todo",dueDate:"2023-09-09"});
+
 app.get("/", async function (request, response) {
   const getTodos = await Todo.getTodos();
   if (request.accepts("html")) {
