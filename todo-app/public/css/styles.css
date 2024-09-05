@@ -2,3 +2,9 @@ body {
   background-color: aqua;
   padding: 10px;
 }
+
+td {
+  border: solid 1px black;
+  padding: 5px;
+  text-align: left;
+  }

@@ -1,9 +1,11 @@
-<tabel>
+<link rel="stylesheet" href="./css/styles.css">
+<table style="border-collapse: collapse; ">
     <% for(let i=0;i< getTodos.length;i++){%>
     <tr>
         <td>
             <%= getTodos[i].title %>
-            <br>
+            <%= getTodos[i].dueDate %>
+            <%= getTodos[i].completed %>
         </td>
     </tr>
    <% } %>
