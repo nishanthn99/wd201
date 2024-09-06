@@ -30,9 +30,9 @@
                     </div>
                 </form>
 
-                <%- include('todos.ejs',{title:"Overdue",data:Overdue,c:1}) %>
-                <%- include('todos.ejs',{title:"Due Today",data:dueToday,c:2}) %>
-                <%- include('todos.ejs',{title:"Due Later",data:dueLater,c:3}) %>
+                <%- include('todos.ejs',{title:"Overdue",data:Overdue,c:1,id:"count-overdue"}) %>
+                <%- include('todos.ejs',{title:"Due Today",data:dueToday,c:2,id:"count-due-today"}) %>
+                <%- include('todos.ejs',{title:"Due Later",data:dueLater,c:3,id:"count-due-later"}) %>
                             <div>
                                 <%- include('footer.ejs') %>
                             </div>
