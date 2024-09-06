@@ -1,7 +1,7 @@
-    <h5 class="text-1xl font-semibold"><%=title %>
+    <h5 id="<%= title%>" class="text-1xl font-semibold flex"><%=title %></h5>
     <span id="count-overdue" class="border border-gray-300 rounded  px-1 py-0 text-sm">
         <%= data.length %>
-    </span></h5>
+    </span>
     <ul class="list-none">
         <% for (var i=0; i< data.length;i++){ %>
             <li class="Todo-Item">
