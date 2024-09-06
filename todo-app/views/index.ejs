@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,12 +29,13 @@
                         </div>
                     </div>
                 </form>
-                <div>
-                    <%- include('todos.ejs',{title:"Overdue",data:Overdue,c:1}) %>
-                    <%- include('todos.ejs',{title:"Due Today",data:dueToday,c:2}) %>
-                    <%- include('todos.ejs',{title:"Due Later",data:dueLater,c:3}) %>
-                    <%- include('footer.ejs') %>
-                </div>
+
+                <%- include('todos.ejs',{title:"Overdue",data:Overdue,c:1}) %>
+                <%- include('todos.ejs',{title:"Due Today",data:dueToday,c:2}) %>
+                <%- include('todos.ejs',{title:"Due Later",data:dueLater,c:3}) %>
+                            <div>
+                                <%- include('footer.ejs') %>
+                            </div>
         </div>
     </div>
 </body>
