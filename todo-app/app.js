@@ -1,52 +1,35 @@
 /* eslint-disable no-undef */
 const express = require("express");
-var csrf=require("tiny-csrf");
 const app = express();
 const { Todo } = require("./models");
 const bodyParser = require("body-parser");
-var cookieParser = require("cookie-parser")
 const path =require("path");
 
 app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser("shh! some secret string"));
-app.use(csrf("this_should_be_32_character_long",["POST","PUT","DELETE"]));
 
+//setting ejs
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname,'public')));
 app.get("/", async (request, response) => {
   const Overdue = await Todo.getOverdueTodos();
   const dueToday= await Todo.getdueTodayTodos();
   const dueLater= await Todo.getdueLaterTodos();
-  const Completed = await Todo.completedItems();
   if (request.accepts("html")) {
     response.render('index', {
       Overdue,
       dueToday,
-      dueLater,
-      Completed,
-      csrfToken: request.csrfToken(),
+      dueLater
     });
   } else {
     response.json({
       Overdue,
       dueToday,
-      dueLater,
-      Completed
+      dueLater
     });
   }
 });
-
-app.get("/", function (request, response) {
-  response.send("Hello World");
-});
-
 app.get("/todos", async function (_request, response) {
   console.log("Processing list of all Todos ...");
-  // FILL IN YOUR CODE HERE
-
-  // First, we have to query our PostgerSQL database using Sequelize to get list of all Todos.
-  // Then, we have to respond with all Todos, like:
   try{
     const todos =await Todo.findAll();
     return response.send(todos);
@@ -54,7 +37,6 @@ app.get("/todos", async function (_request, response) {
     console.log(error);
     return response.status(422).json(error);
   }
-  // response.send(todos)
 });
 
 app.get("/todos/:id", async function (request, response) {
@@ -69,8 +51,8 @@ app.get("/todos/:id", async function (request, response) {
 
 app.post("/todos", async function (request, response) {
   try {
-    await Todo.addTodo(request.body);
-    return response.redirect("/");
+    const Todoss=await Todo.addTodo(request.body);
+    return response.status(200).json(Todoss);
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
@@ -105,9 +87,6 @@ app.delete("/todos/:id", async function (request, response) {
   } else {
     response.send(false);
   }
-  // First, we have to query our database to delete a Todo by ID.
-  // Then, we have to respond back with true/false based on whether the Todo was deleted or not.
-  // response.send(true)
 });
 
 module.exports = app;

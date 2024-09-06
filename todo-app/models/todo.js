@@ -1,9 +1,6 @@
 /* eslint-disable no-unused-vars */
 'use strict';
-const {
-  Model,
-  Op
-} = require('sequelize');
+const { Model,Op} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Todo extends Model {
     /**
@@ -57,17 +54,7 @@ module.exports = (sequelize, DataTypes) => {
             },
           },
         });
-        if(DueTodayTodos.length >=1){
-          return DueTodayTodos;
-        }else{
-          await this.addTodo({
-            title:"Buy milk",
-            dueDate: new Date().toISOString(),
-            completed:false,
-          });
-        }
-        const dueToday = this.getdueTodayTodos;
-        return dueToday
+        return DueTodayTodos;
       }catch(error) {
         console.error('Error!!!',error);
         throw error;
@@ -82,19 +69,7 @@ module.exports = (sequelize, DataTypes) => {
             },
           },
         });
-        if(DueLaterTodos.length >=1){
-          return DueLaterTodos;
-        }else{
-          const tomorrow = new Date();
-          tomorrow.setDate(tomorrow.getDate() + 1);
-          await this.addTodo({
-            title:"Have to pay electricity bill",
-            dueDate:  tomorrow.toISOString(),
-            completed:false,
-          });
-        }
-        const dueLater = await this.getdueLaterTodos;
-        return dueLater
+        return DueLaterTodos
       }catch(error) {
         console.error('Error!!!',error);
         throw error;
@@ -107,22 +82,22 @@ module.exports = (sequelize, DataTypes) => {
         }
       })
     }
-    static async completedItems(){
-      try{
-        const Completed = await this.findAll({
-          where:{
-          completed: true,
-        }
-      })
-      return Completed
-    }catch(error){
-      console.error('Error!!!' , error);
-      throw error;
-    }
-  }
-  setCompletionStatus(receiver){
-    return this.update({completed: receiver});
-  }
+  //   static async completedItems(){
+  //     try{
+  //       const Completed = await this.findAll({
+  //         where:{
+  //         completed: true,
+  //       }
+  //     })
+  //     return Completed
+  //   }catch(error){
+  //     console.error('Error!!!' , error);
+  //     throw error;
+  //   }
+  // }
+  // setCompletionStatus(receiver){
+  //   return this.update({completed: receiver});
+  // }
 }
   Todo.init({
     title: DataTypes.STRING,
