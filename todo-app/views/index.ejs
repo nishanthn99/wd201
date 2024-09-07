@@ -7,13 +7,54 @@
     <title>Todo-Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/styles.css" />
+    <script>
+        const updateTodo=(id)=>{
+            fetch(`/todos/${id}/markAsCompleted`,{
+                method:'put',
+                headers:{
+                    'Content-Type':'application/json'}
+            })
+                .then((response)=>{
+                    if(response.ok)
+                    {window.location.reload()}
+                else{
+                    console.log("error")
+                }});
+        }
+        const markIncomplete=(id)=>{
+            fetch(`/todos/${id}/markIncompleted`,{
+                method:'put',
+                headers:{
+                    'Content-Type':'application/json'}
+            })
+                .then((response)=>{
+                    if(response.ok)
+                    {window.location.reload()}
+                else{
+                    console.log("error")
+                }});
+        }
+        const deleteTodo=(id)=>{
+            fetch(`/todos/${id}`,{
+                method:'delete',
+                headers:{
+                    'Content-Type':'application/json'}
+            })
+                .then((response)=>{
+                    if(response.ok)
+                    {window.location.reload()}
+                else{
+                    console.log("error")
+                }});
+        }
+    </script>
 </head>
 
 <body>
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
-                <form>
+                <form action="/todos" method="post">
                     <div class="flex gap-2 py-4">
                         <div class="flex-auto">
                             <input type="text" name="title" placeholder="What's next?"

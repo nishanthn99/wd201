@@ -4,7 +4,7 @@ const app = express();
 const { Todo } = require("./models");
 const bodyParser = require("body-parser");
 const path =require("path");
-
+app.use(express.urlencoded({extended:true}))
 app.use(bodyParser.json());
 
 //setting ejs
@@ -51,18 +51,28 @@ app.get("/todos/:id", async function (request, response) {
 
 app.post("/todos", async function (request, response) {
   try {
-    const Todoss=await Todo.addTodo(request.body);
-    return response.status(200).json(Todoss);
+    await Todo.addTodo(request.body.title,request.body.dueDate);
+    return response.redirect('/');
   } catch (error) {
     console.log(error);
     return response.status(422).json(error);
   }
 });
 
-app.put("/todos/:id/markAsCompleted", async function (request, response) {
+app.put("/todos/:id/markASCompleted", async function (request, response) {
   const todo = await Todo.findByPk(request.params.id);
   try {
     const updatedTodo = await todo.markAsCompleted();
+    return response.json(updatedTodo);
+  } catch (error) {
+    console.log(error);
+    return response.status(422).json(error);
+  }
+});
+app.put("/todos/:id/markIncompleted", async function (request, response) {
+  const todo = await Todo.findByPk(request.params.id);
+  try {
+    const updatedTodo = await todo.markAsIncompleted();
     return response.json(updatedTodo);
   } catch (error) {
     console.log(error);
@@ -79,11 +89,7 @@ app.delete("/todos/:id", async function (request, response) {
         id: request.params.id,
       },
     });
-    if (await Todo.findByPk(request.params.id)) {
-      response.send(false);
-    } else {
-      response.send(true);
-    }
+    response.send(true);
   } else {
     response.send(false);
   }

@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-    static addTodo({title,dueDate}){
+    static addTodo(title,dueDate){
       return this.create({title: title, dueDate: dueDate, completed: false});
     }
     static async getTodos(){
@@ -23,82 +23,35 @@ module.exports = (sequelize, DataTypes) => {
     markAsCompleted() {
       return this.update({completed: true});
     }
+    markAsIncompleted() {
+      return this.update({completed: false});
+    }
     static async getOverdueTodos(){
-      try{
-        const OverdueTodos =await Todo.findAll({
+        return this.findAll({
           where: {
             dueDate:{
-              [Op.lt]: new Date(),
+              [Op.lt]: new Date().toLocaleDateString('en-CA'),
             },
           },
         });
-        if(OverdueTodos.length >= 1){
-          return OverdueTodos
-        }else{
-          await this.addTodo({
-            title:"Go to Home",
-            dueDate: new Date(new Date().setDate(new Date().getDate()-1)).toISOString(),
-            completed:false,
-          });          
-        }
-        const Overdue =await this.getOverdueTodos;
-        return Overdue
-      }catch(error) {
-        console.error('Error!!!',error);
-        throw error;
-      }
     }
     static async getdueTodayTodos(){
-      try{
-        const DueTodayTodos =await Todo.findAll({
+        return this.findAll({
           where: {
             dueDate:{
-              [Op.between]:[new Date(),new Date(new Date().setHours(23,59,59,999))],
+              [Op.eq]:new Date().toLocaleDateString('en-CA'),
             },
           },
         });
-        if(DueTodayTodos.length >=1){
-          return DueTodayTodos;
-        }else{
-          await this.addTodo({
-            title:"Buy milk",
-            dueDate: new Date().toISOString(),
-            completed:false,
-          });
-        }
-        const dueToday = this.getdueTodayTodos;
-        return dueToday
-      }catch(error) {
-        console.error('Error!!!',error);
-        throw error;
-      }
     }
     static async getdueLaterTodos(){
-      try{
-        const DueLaterTodos =await Todo.findAll({
+      return this.findAll({
           where: {
             dueDate:{
-              [Op.gt]: new Date(),
+              [Op.gt]: new Date().toLocaleDateString('en-CA'),
             },
           },
         });
-        if(DueLaterTodos.length >=1){
-          return DueLaterTodos;
-        }else{
-          const tomorrow = new Date();
-          tomorrow.setDate(tomorrow.getDate() + 1);
-          await this.addTodo({
-            title:"Have to pay electricity bill",
-            dueDate:  tomorrow.toISOString(),
-            completed:false,
-          });
-        }
-        const dueLater = await this.getdueLaterTodos;
-        return dueLater
-      }catch(error) {
-        console.error('Error!!!',error);
-        throw error;
-      }
     }
     static async remove(id) {
       return this.destroy({
