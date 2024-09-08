@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="<%= _csrf %>">
     <title>Todo-Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/styles.css" />
     <script>
+        let token=document.querySelector('meta[name="csrf-token"]').getAttribute("content");
         const updateTodo=(id)=>{
-            fetch(`/todos/${id}/markAsCompleted`,{
+            fetch(`/todos/${id}`,{
                 method:'put',
                 headers:{
-                    'Content-Type':'application/json'}
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify({"_csrf":token})
             })
                 .then((response)=>{
                     if(response.ok)
@@ -21,24 +24,26 @@
                     console.log("error")
                 }});
         }
-        const markIncomplete=(id)=>{
-            fetch(`/todos/${id}/markIncompleted`,{
-                method:'put',
-                headers:{
-                    'Content-Type':'application/json'}
-            })
-                .then((response)=>{
-                    if(response.ok)
-                    {window.location.reload()}
-                else{
-                    console.log("error")
-                }});
-        }
+        // const markIncomplete=(id)=>{
+        //     fetch(`/todos/${id}/markIncompleted`,{
+        //         method:'put',
+        //         headers:{
+        //             'Content-Type':'application/json'},
+        //         body:JSON.stringify({"_csrf":token})
+        //     })
+        //         .then((response)=>{
+        //             if(response.ok)
+        //             {window.location.reload()}
+        //         else{
+        //             console.log("error")
+        //         }});
+        // }
         const deleteTodo=(id)=>{
             fetch(`/todos/${id}`,{
                 method:'delete',
                 headers:{
-                    'Content-Type':'application/json'}
+                    'Content-Type':'application/json'},
+                body:JSON.stringify({_csrf:token})
             })
                 .then((response)=>{
                     if(response.ok)
@@ -57,12 +62,13 @@
                 <form action="/todos" method="post">
                     <div class="flex gap-2 py-4">
                         <div class="flex-auto">
+                            <input type="hidden" name="_csrf" value="<%= _csrf %>">
                             <input type="text" name="title" placeholder="What's next?"
                                 class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" required />
                         </div>
                         <div class="flex-auto">
                             <input type="date" name="dueDate"
-                                class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm leading-4" />
+                                class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm leading-4" required/>
                         </div>
                         <div class="flex-none">
                             <button type="submit"
@@ -71,13 +77,14 @@
                     </div>
                 </form>
 
-                <%- include('todos.ejs',{title:"Overdue",data:Overdue,c:1,id:"count-overdue"}) %>
-                <%- include('todos.ejs',{title:"Due Today",data:dueToday,c:2,id:"count-due-today"}) %>
-                <%- include('todos.ejs',{title:"Due Later",data:dueLater,c:3,id:"count-due-later"}) %>
-                            <div>
-                                <%- include('footer.ejs') %>
-                            </div>
+                <%- include('todos.ejs',{title:"Overdue",data:Overdue,id:"count-overdue"}) %>
+                <%- include('todos.ejs',{title:"Due Today",data:dueToday,id:"count-due-today"}) %>
+                <%- include('todos.ejs',{title:"Due Later",data:dueLater,id:"count-due-later"}) %>
+                <%- include('todos.ejs',{title:"Completed Items",data:completedItems,id:"count-completed"}) %>
         </div>
+    </div>
+    <div>
+        <%- include('footer.ejs') %>
     </div>
 </body>
 
