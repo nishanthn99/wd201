@@ -153,19 +153,6 @@ app.get("/logout", (req, res, next) => {
 app.post("/newuser", async (req, res) => {
   const bcryptPass = await bcrypt.hash(req.body.password, saltRounds);
   try {
-    if (req.body.firstName.length === 0) {
-      req.flash("error", "First Name can't be empty");
-      return res.redirect("/signup");
-    }
-    if (req.body.email.length === 0) {
-      req.flash("error", "Email can't be empty");
-      return res.redirect("/signup");
-    }
-  
-    if (req.body.password.length === 0) {
-      req.flash("error", "Password can't be empty");
-      return res.redirect("/signup");
-    }
     const user = await User.create({
       firstname: req.body.firstname,
       lastname: req.body.lastname,
