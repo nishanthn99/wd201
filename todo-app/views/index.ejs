@@ -3,89 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="<%= _csrf %>">
     <title>Todo-Manager</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/css/styles.css" />
-    <script>
-        let token=document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-        const updateTodo=(id)=>{
-            fetch(`/todos/${id}`,{
-                method:'put',
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                body:JSON.stringify({"_csrf":token})
-            })
-                .then((response)=>{
-                    if(response.ok)
-                    {window.location.reload()}
-                else{
-                    console.log("error")
-                }});
-        }
-        // const markIncomplete=(id)=>{
-        //     fetch(`/todos/${id}/markIncompleted`,{
-        //         method:'put',
-        //         headers:{
-        //             'Content-Type':'application/json'},
-        //         body:JSON.stringify({"_csrf":token})
-        //     })
-        //         .then((response)=>{
-        //             if(response.ok)
-        //             {window.location.reload()}
-        //         else{
-        //             console.log("error")
-        //         }});
-        // }
-        const deleteTodo=(id)=>{
-            fetch(`/todos/${id}`,{
-                method:'delete',
-                headers:{
-                    'Content-Type':'application/json'},
-                body:JSON.stringify({_csrf:token})
-            })
-                .then((response)=>{
-                    if(response.ok)
-                    {window.location.reload()}
-                else{
-                    console.log("error")
-                }});
-        }
-    </script>
 </head>
 
 <body>
     <div class="grid grid-cols-6">
         <div class="col-start-3 col-span-2">
             <%- include('header.ejs') %>
-                <form action="/todos" method="post">
-                    <div class="flex gap-2 py-4">
-                        <div class="flex-auto">
-                            <input type="hidden" name="_csrf" value="<%= _csrf %>">
-                            <input type="text" name="title" placeholder="What's next?"
-                                class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm" required />
-                        </div>
-                        <div class="flex-auto">
-                            <input type="date" name="dueDate"
-                                class="border border-gray-300 rounded text-gray-900 w-full p-2 text-sm leading-4" required/>
-                        </div>
-                        <div class="flex-none">
-                            <button type="submit"
-                                class="bg-green-600 text-white px-5 py-1.5 rounded font-medium mr-2">Add</button>
-                        </div>
-                    </div>
-                </form>
-
-                <%- include('todos.ejs',{title:"Overdue",data:Overdue,id:"count-overdue"}) %>
-                <%- include('todos.ejs',{title:"Due Today",data:dueToday,id:"count-due-today"}) %>
-                <%- include('todos.ejs',{title:"Due Later",data:dueLater,id:"count-due-later"}) %>
-                <%- include('todos.ejs',{title:"Completed Items",data:completedItems,id:"count-completed"}) %>
-        </div>
+            <p class="py-4">Welocome to Todo-Manager APP</p>
+            <p class="py-4">To Create A new Account <a href="/signup"class="text-green-800" >signUp to create Account</a></p>
+            <p class="py-4" >Already have an Account <a href="/login" class="text-green-800">signIn to Account</a></p>
     </div>
-    <div>
-        <%- include('footer.ejs') %>
     </div>
+    <%- include('footer.ejs') %>
 </body>
 
 </html>

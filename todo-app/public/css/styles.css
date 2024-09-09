@@ -4,6 +4,6 @@ body {
   margin-top: 4px;
 }
 
-.Todo-Item:hover .trash-icon{
+.Todo-Item:hover .trash-icon {
   display: block;
 }
