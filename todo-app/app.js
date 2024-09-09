@@ -19,6 +19,10 @@ const connectEnsureLogin = require("connect-ensure-login");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
+const flash=require('connect-flash');
+app.set('views',path.join(__dirname,'views'))
+app.use(flash());
+
 app.use(
   session({
     secret: "nishanth99",
@@ -31,6 +35,11 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(function(request, response, next) {
+  response.locals.messages = request.flash();
+  next();
+});
 
 passport.use(
   new LocalStrategy(
@@ -45,7 +54,7 @@ passport.use(
           if (compared) {
             return done(null, user);
           } else {
-            return done("Invalide Login Creditials");
+            return done(null,false,{message:"Invalide Login Creditials"});
           }
         })
         .catch((err) => {
@@ -125,9 +134,9 @@ app.get("/login", (req, res) => {
 
 app.post(
   "/session",
-  passport.authenticate("local", { failureRedirect: "/login" }),
+  passport.authenticate("local", { failureRedirect: "/login",failureFlash:true }),
   (req, res) => {
-    console.log(req.user);
+    req.flash("success", "Login successful!");
     res.redirect("/todos");
   },
 );
@@ -144,6 +153,19 @@ app.get("/logout", (req, res, next) => {
 app.post("/newuser", async (req, res) => {
   const bcryptPass = await bcrypt.hash(req.body.password, saltRounds);
   try {
+    if (req.body.firstName.length === 0) {
+      req.flash("error", "First Name can't be empty");
+      return res.redirect("/signup");
+    }
+    if (req.body.email.length === 0) {
+      req.flash("error", "Email can't be empty");
+      return res.redirect("/signup");
+    }
+  
+    if (req.body.password.length === 0) {
+      req.flash("error", "Password can't be empty");
+      return res.redirect("/signup");
+    }
     const user = await User.create({
       firstname: req.body.firstname,
       lastname: req.body.lastname,
@@ -184,11 +206,23 @@ app.get("/todos/:id", async function (request, response) {
 
 app.post("/todos", async function (request, response) {
   try {
+    if (request.body.title.length < 5) {
+      request.flash(
+        "error",
+        "Please make sure title should be more than 5 letters",
+      );
+      return response.redirect("/todos");
+    }
+    if (request.body.dueDate == "") {
+      request.flash("error", "Please Enter date");
+      return response.redirect("/todos");
+    }
     await Todo.addTodo(
       request.body.title,
       request.body.dueDate,
       request.user.id,
     );
+    request.flash("success", "Todo created successfully.");
     return response.redirect("/todos");
   } catch (error) {
     console.log(error);
@@ -200,6 +234,7 @@ app.put("/todos/:id", async function (request, response) {
   const todo = await Todo.findByPk(request.params.id);
   if (todo.completed) {
     const updatedTodo = await todo.setCompletionStatus(false);
+    request.flash('success',`Todo marked as complete`);
     response.json(updatedTodo);
   } else {
     const updatedTodo = await todo.setCompletionStatus(true);
@@ -235,6 +270,7 @@ app.delete("/todos/:id", async function (request, response) {
   try {
     const id = request.params.id;
     await Todo.remove(id, userId);
+    request.flash("success", "Todo deleted successfully.");
     return response.status(200).json(true);
   } catch (error) {
     console.log(error);
