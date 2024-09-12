@@ -144,7 +144,7 @@ app.post(
   },
 );
 
-app.get("/logout", (req, res, next) => {
+app.get("/logout",connectEnsureLogin.ensureLoggedIn(), (req, res, next) => {
   req.logout((err) => {
     if (err) {
       return next(err);
@@ -199,7 +199,7 @@ app.get("/todo", async function (_request, response) {
   }
 });
 
-app.get("/todos/:id", async function (request, response) {
+app.get("/todos/:id",connectEnsureLogin.ensureLoggedIn(), async function (request, response) {
   try {
     const todo = await Todo.findByPk(request.params.id);
     return response.json(todo);
@@ -235,7 +235,7 @@ app.post("/todos", async function (request, response) {
   }
 });
 
-app.put("/todos/:id", async function (request, response) {
+app.put("/todos/:id",connectEnsureLogin.ensureLoggedIn(), async function (request, response) {
   const todo = await Todo.findByPk(request.params.id);
   if (todo.completed) {
     const updatedTodo = await todo.setCompletionStatus(false);
@@ -268,7 +268,7 @@ app.put("/todos/:id/markIncompleted", async function (request, response) {
   }
 });
 
-app.delete("/todos/:id", async function (request, response) {
+app.delete("/todos/:id",connectEnsureLogin.ensureLoggedIn(), async function (request, response) {
   console.log("We have to delete a Todo with ID: ", request.params.id);
   const userId = request.user.id;
   // FILL IN YOUR CODE HERE
