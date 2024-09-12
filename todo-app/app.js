@@ -151,12 +151,27 @@ app.get("/logout", (req, res, next) => {
 });
 
 app.post("/newuser", async (req, res) => {
-  const bcryptPass = await bcrypt.hash(req.body.password, saltRounds);
-  try {
+  const fname=req.body.firstname;
+  const email=req.body.email;
+  const password=req.body.password;
+  const bcryptPass = await bcrypt.hash(password, saltRounds);
+  if(fname==="" || fname.length<5){
+    req.flash("error", "Please enter a valid first name.");
+    return res.redirect("/signup");
+  }
+  else if(email===" "){
+    req.flash("error", "Please enter a valid Email name.");
+    return res.redirect("/signup");
+  }
+  else if(password===""){
+    req.flash("error", "Please enter a valid password.");
+    return res.redirect("/signup");
+  }
+  else{try {
     const user = await User.create({
-      firstname: req.body.firstname,
+      firstname: fname,
       lastname: req.body.lastname,
-      email: req.body.email,
+      email: email,
       password: bcryptPass,
     });
     req.login(user, (err) => {
@@ -167,7 +182,7 @@ app.post("/newuser", async (req, res) => {
     });
   } catch (err) {
     res.status(400).send({ message: err.message });
-  }
+  }}
 });
 
 app.get("/todo", async function (_request, response) {
@@ -213,7 +228,7 @@ app.post("/todos", async function (request, response) {
     return response.redirect("/todos");
   } catch (error) {
     console.log(error);
-    return response.status(422).json(error);
+    return response.status(422).json(error.message);
   }
 });
 
@@ -246,7 +261,7 @@ app.put("/todos/:id/markIncompleted", async function (request, response) {
     return response.json(updatedTodo);
   } catch (error) {
     console.log(error);
-    return response.status(422).json(error);
+    return response.status(422).send({message:error});
   }
 });
 
