@@ -19,8 +19,8 @@ const connectEnsureLogin = require("connect-ensure-login");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
-const flash=require('connect-flash');
-app.set('views',path.join(__dirname,'views'))
+const flash = require("connect-flash");
+app.set("views", path.join(__dirname, "views"));
 app.use(flash());
 
 app.use(
@@ -36,7 +36,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(function(request, response, next) {
+app.use(function (request, response, next) {
   response.locals.messages = request.flash();
   next();
 });
@@ -54,7 +54,7 @@ passport.use(
           if (compared) {
             return done(null, user);
           } else {
-            return done(null,false,{message:"Invalide Login Creditials"});
+            return done(null, false, { message: "Invalide Login Creditials" });
           }
         })
         .catch((err) => {
@@ -134,7 +134,10 @@ app.get("/login", (req, res) => {
 
 app.post(
   "/session",
-  passport.authenticate("local", { failureRedirect: "/login",failureFlash:true }),
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureFlash: true,
+  }),
   (req, res) => {
     req.flash("success", "Login successful!");
     res.redirect("/todos");
@@ -151,23 +154,23 @@ app.get("/logout", (req, res, next) => {
 });
 
 app.post("/newuser", async (req, res) => {
-  const fname=req.body.firstname;
-  const email=req.body.email;
-  const password=req.body.password;
+  const fname = req.body.firstname;
+  const email = req.body.email;
+  const password = req.body.password;
   const bcryptPass = await bcrypt.hash(password, saltRounds);
-  if(fname==="" || fname.length<5){
+  if (fname.length < 3) {
     req.flash("error", "Please enter a valid first name.");
     return res.redirect("/signup");
   }
-  else if(email===" "){
+  if (email.length < 1) {
     req.flash("error", "Please enter a valid Email name.");
     return res.redirect("/signup");
   }
-  else if(password===""){
+  if (password.length < 1) {
     req.flash("error", "Please enter a valid password.");
     return res.redirect("/signup");
   }
-  else{try {
+  try {
     const user = await User.create({
       firstname: fname,
       lastname: req.body.lastname,
@@ -182,7 +185,7 @@ app.post("/newuser", async (req, res) => {
     });
   } catch (err) {
     res.status(400).send({ message: err.message });
-  }}
+  }
 });
 
 app.get("/todo", async function (_request, response) {
@@ -228,7 +231,7 @@ app.post("/todos", async function (request, response) {
     return response.redirect("/todos");
   } catch (error) {
     console.log(error);
-    return response.status(422).json(error.message);
+    return response.status(422).json(error);
   }
 });
 
@@ -236,7 +239,7 @@ app.put("/todos/:id", async function (request, response) {
   const todo = await Todo.findByPk(request.params.id);
   if (todo.completed) {
     const updatedTodo = await todo.setCompletionStatus(false);
-    request.flash('success',`Todo marked as complete`);
+    request.flash("success", `Todo marked as complete`);
     response.json(updatedTodo);
   } else {
     const updatedTodo = await todo.setCompletionStatus(true);
@@ -261,7 +264,7 @@ app.put("/todos/:id/markIncompleted", async function (request, response) {
     return response.json(updatedTodo);
   } catch (error) {
     console.log(error);
-    return response.status(422).send({message:error});
+    return response.status(422).json(error);
   }
 });
 

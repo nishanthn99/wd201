@@ -17,24 +17,27 @@ module.exports = (sequelize, DataTypes) => {
   User.init(
     {
       firstname: {
-        type:DataTypes.STRING,
-      allowNull:false,
-      validate: {
-        notNull: true
-    }},
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: true,
+        },
+      },
       lastname: DataTypes.STRING,
       email: {
-        type:DataTypes.STRING,
-      allowNull:false,
-      validate: {
-        notNull: true
-    }},
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: true,
+        },
+      },
       password: {
-        type:DataTypes.STRING,
-      allowNull:false,
-      validate: {
-        notNull: true
-    }},
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: true,
+        },
+      },
     },
     {
       sequelize,

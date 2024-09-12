@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 "use strict";
 const { Model, Op } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
@@ -91,19 +90,19 @@ module.exports = (sequelize, DataTypes) => {
     {
       title: {
         type: DataTypes.STRING,
-        allowNull: false, 
+        allowNull: false,
         validate: {
-            notNull: true,
-            len: 5
-        }
-     },
-      dueDate:{
+          notNull: true,
+          len: 5,
+        },
+      },
+      dueDate: {
         type: DataTypes.DATEONLY,
-        allowNull: false, 
+        allowNull: false,
         validate: {
-            notNull: true
-        }
-     },
+          notNull: true,
+        },
+      },
       completed: DataTypes.BOOLEAN,
     },
     {
