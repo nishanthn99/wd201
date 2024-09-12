@@ -154,7 +154,7 @@ app.get("/logout",connectEnsureLogin.ensureLoggedIn(), (req, res, next) => {
 });
 
 app.post("/newuser", async (req, res) => {
-  const fname = req.body.firstname;
+  const fname = req.body.firstName;
   const email = req.body.email;
   const password = req.body.password;
   const bcryptPass = await bcrypt.hash(password, saltRounds);
@@ -173,7 +173,7 @@ app.post("/newuser", async (req, res) => {
   try {
     const user = await User.create({
       firstname: fname,
-      lastname: req.body.lastname,
+      lastname: req.body.lastName,
       email: email,
       password: bcryptPass,
     });
